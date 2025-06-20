@@ -36,27 +36,34 @@ def main():
     if args.registryhive is None:
         print ("Path and name of the registry hive was not specified")
         return
+
     if args.primarytransactionlog is None:
         print ("Path and name of the primary transaction log was not specified")
         return
 
-    primaryTransactionSize = os.path.getsize(args.primarytransactionlog)
-    if primaryTransactionSize != 0:
-        print(f"Primary Transaction File size: {primaryTransactionSize} bytes")
+    if os.exists(args.primarytransactionlog):
+        primaryTransactionSize = os.path.getsize(args.primarytransactionlog)
+        if primaryTransactionSize != 0:
+            print(f"Primary Transaction File size: {primaryTransactionSize} bytes")
+        else:
+            print(f"Primary Transaction File size is 0 bytes, No transactions to process")
+            return
     else:
-        print(f"Primary Transaction File size is 0 bytes, No transactions to process")
-        return
+        print(f"Primary Transaction File does not exist: {args.primarytransactionlog}")
 
     if args.secondarytransactionlog is not None:
-        secondaryTransactionSize = os.path.getsize(args.secondarytransactionlog)
-        if secondaryTransactionSize != 0:
-            print(f"secondary Transaction File size: {secondaryTransactionSize} bytes")
-            secondaryTransactionFile = args.secondarytransactionlog
+        if os.exists(args.secondarytransactionlog):
+            secondaryTransactionSize = os.path.getsize(args.secondarytransactionlog)
+            if secondaryTransactionSize != 0:
+                print(f"secondary Transaction File size: {secondaryTransactionSize} bytes")
+                secondaryTransactionFile = args.secondarytransactionlog
+            else:
+                print(f"Secondary Transaction File size is 0 bytes, No secondary transactions to process")
+                secondaryTransactionFile = None
         else:
-            print(f"Secondary Transaction File size is 0 bytes, No secondary transactions to process")
+            print(f"Secondary Transaction File does not exist: {args.secondarytransactionlog}")
+            print("No secondary transactions to process")
             secondaryTransactionFile = None
-    else:
-        secondaryTransactionFile = None
 
     dirtyHive = args.registryhive + "_dirty"
     os.rename(args.registryhive, dirtyHive)
