@@ -41,7 +41,7 @@ def main():
         print ("Path and name of the primary transaction log was not specified")
         return
 
-    if os.exists(args.primarytransactionlog):
+    if os.path.exists(args.primarytransactionlog):
         primaryTransactionSize = os.path.getsize(args.primarytransactionlog)
         if primaryTransactionSize != 0:
             print(f"Primary Transaction File size: {primaryTransactionSize} bytes")
@@ -52,7 +52,7 @@ def main():
         print(f"Primary Transaction File does not exist: {args.primarytransactionlog}")
 
     if args.secondarytransactionlog is not None:
-        if os.exists(args.secondarytransactionlog):
+        if os.path.exists(args.secondarytransactionlog):
             secondaryTransactionSize = os.path.getsize(args.secondarytransactionlog)
             if secondaryTransactionSize != 0:
                 print(f"secondary Transaction File size: {secondaryTransactionSize} bytes")
